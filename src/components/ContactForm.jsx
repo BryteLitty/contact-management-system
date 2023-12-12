@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { saveContactToLocalstorage } from '../../utils/functions';
 
 const ContactForm = () => {
+
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -9,8 +11,14 @@ const ContactForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        saveContactToLocalstorage({
+            name, email, phoneNumber
+        })
+
+        console.log('Contact saved')
+
         // validation using Regular Expression
-        addContact({ name, email, phoneNumber });
+        // addContact({ name, email, phoneNumber });
         setName('');
         setEmail('');
         setPhoneNumber('');
@@ -18,7 +26,7 @@ const ContactForm = () => {
 
   return (
     <div className='container mx-auto my-32'>
-        <form className='w-[40%] mx-auto'>
+        <form className='w-[40%] mx-auto'onSubmit={handleSubmit}>
             <div className="my-5">
                 <label className='font-bold'>Name:</label>
                 <div className='mt-2'>
