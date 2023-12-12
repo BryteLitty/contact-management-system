@@ -1,9 +1,12 @@
-import React from 'react'
+import React from 'react';
+import ContactForm from '@/components/ContactForm';
+
+
 
 const index = () => {
   return (
     <div>
-      Contact Management App
+      <ContactForm />
     </div>
   )
 }
