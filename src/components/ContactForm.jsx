@@ -1,33 +1,46 @@
-import React, { useState } from 'react';
+// ContactForm.jsx
+import React, { useState, useEffect } from 'react';
 import { saveContactToLocalstorage } from '../../utils/functions';
 
-const ContactForm = () => {
+const ContactForm = ({ editMode, editContactDetails, addContact, editContact }) => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
 
-
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        saveContactToLocalstorage({
-            name, email, phoneNumber
-        })
-
-        console.log('Contact saved')
-
-        // validation using Regular Expression
-        // addContact({ name, email, phoneNumber });
-        setName('');
-        setEmail('');
-        setPhoneNumber('');
+  useEffect(() => {
+    if (editMode && editContactDetails) {
+      setName(editContactDetails.name || '');
+      setEmail(editContactDetails.email || '');
+      setPhoneNumber(editContactDetails.phoneNumber || '');
     }
+  }, [editMode, editContactDetails]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const newContact = {
+      name,
+      email,
+      phoneNumber,
+    };
+
+    if (editMode) {
+      editContact(editContactDetails.index, newContact);
+    } else {
+      addContact(newContact);
+    }
+
+    saveContactToLocalstorage(newContact);
+
+    setName('');
+    setEmail('');
+    setPhoneNumber('');
+  };
 
   return (
     <div className='container mx-auto my-32'>
-        <form className='w-[40%] mx-auto'onSubmit={handleSubmit}>
-            <div className="my-5">
+      <form className='w-[40%] mx-auto' onSubmit={handleSubmit}>
+      <div className="my-5">
                 <label className='font-bold'>Name:</label>
                 <div className='mt-2'>
                     <input 
@@ -68,15 +81,14 @@ const ContactForm = () => {
                     />
                 </div>
             </div>
-
-            <div>
-                <button type='submit' className='bg-orange-600 font-bold text-white text-2xl text-center w-full p-3'>
-                    Add Contact
-                </button>
-            </div>
-        </form>
+        <div>
+          <button type='submit' className='bg-orange-600 font-bold text-white text-2xl text-center w-full p-3'>
+            {editMode ? 'Update Contact' : 'Add Contact'}
+          </button>
+        </div>
+      </form>
     </div>
-  )
-}
+  );
+};
 
 export default ContactForm;

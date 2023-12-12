@@ -5,4 +5,6 @@ export const saveContactToLocalstorage = (contact) => {
 
     // Save the updated contacts array to local storage
     localStorage.setItem('contacts', JSON.stringify(updatedContacts));
-  };
+};
+
+
